@@ -6,13 +6,28 @@
   padding: 0;
 }
 
+body {
+  display: flex;
+  justify-content: center;
+}
+
 .lists {
-  padding-top: 40px;
+  padding: 40px;
   height: 100vh;
+  width: fit-content;
   background-color: #e5e5e5;
   display: flex;
   justify-content: center;
+  overflow: auto;
   gap: 20px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 100vh;
+    gap: 20px;
+  }
 }
 
 .list {
