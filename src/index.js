@@ -83,7 +83,7 @@ function dragAndDrop(e) {
     // Получаем координаты элемента
     let coords = e.target.getBoundingClientRect();
 
-    // Рассчитываем координаты в px от клика до левой и верхней границы элемента, clientX - это MouseEvent.clientX - координата клика без учёта scroll
+    // Рассчитываем координаты в px от клика до левой и верхней границы элемента, clientX - это MouseEvent.clientX - координата клика с учётом скролл
     dragObject.shiftX = e.clientX - coords.left;
     dragObject.shiftY = e.clientY - coords.top;
     dragObject.width = coords.width;
