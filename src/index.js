@@ -1,8 +1,12 @@
+let dragContainer = document.querySelector(".parent-droppable");
+
+dragContainer.addEventListener("pointerdown", dragAndDrop);
+
 // Созадим объект для хранения информации о перемещаемом элементе
-let dragObject = {}
+let dragObject = {};
 
 // И ещё объект для хранения информации о границах контейнера, в котором объект можно перемещать
-let parentObject = {}
+let parentObject = {};
 
 // Функция двигающая элемент
 function moveAt(x, y) {
@@ -22,13 +26,13 @@ function moveAt(x, y) {
     } else if (y >= parentObject.bottom + dragObject.shiftY) {
         dragObject.element.style.setProperty("top", parentObject.bottom + "px");
     } else dragObject.element.style.setProperty("top", y - dragObject.shiftY + "px");
-}
+};
 
 //функция, которая вызывается при срабатывании события pointermove 
 function moving(event) {
     document.addEventListener("pointerup", cancelMoving);
     moveAt(event.pageX, event.pageY);
-}
+};
 
 function findDroppable(e) {
     dragObject.element.style.setProperty("z-index", -1);
@@ -42,8 +46,7 @@ function findDroppable(e) {
     if (elem.classList == "droppable") {
         return elem;
     } else return elem.closest(".droppable");
-
-}
+};
 
 // Функция которая вызывается при событии pointerup, удаляющая обработчик и свой тоже 
 function cancelMoving(event) {
@@ -57,16 +60,15 @@ function cancelMoving(event) {
     if (destination) {
         destination.append(dragObject.element);
     } else {
-        console.log(dragObject.old.parent);
         dragObject.old.parent.append(dragObject.element);
-    }
+    };
 
     document.removeEventListener("pointermove", moving);
     document.removeEventListener("pointerup", cancelMoving);
 
     dragObject = {};
     parentObject = {};
-}
+};
 
 function dragAndDrop(e) {
     dragObject.element = e.target.closest(".draggable");
@@ -76,7 +78,7 @@ function dragAndDrop(e) {
     //Сохраним изначальные значения
     dragObject.old = {
         parent: dragObject.element.parentNode,
-    }
+    };
 
     // Получаем координаты элемента
     let coords = e.target.getBoundingClientRect();
@@ -100,8 +102,4 @@ function dragAndDrop(e) {
     moveAt(e.pageX, e.pageY);
 
     document.addEventListener("pointermove", moving);
-}
-
-let dragContainer = document.querySelector(".lists");
-
-dragContainer.addEventListener("pointerdown", dragAndDrop);
+};
