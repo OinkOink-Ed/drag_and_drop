@@ -1,26 +1,45 @@
 class DragBox {
+    #coords;
+    #draggble;
+    #propertys;
+    #shiftX;
+    #shiftY;
+
     constructor(event, name) {
-        this.element = event.target.closest(`.${name}`);
-        // this.parent = element.parentElement;
-        this.propetys = this.getProperty(name).style;
-        this.position = this.propetys.position;
-        this.zIndex = null;
-        this.left = null;
-        this.top = null;
-        this.width = null;
-        this.height = null;
-        this.shiftX = null;
-        this.shiftY = null;
-        this.coords = null;
+        const { target } = event;
 
-        this.getProperty();
+        this.#draggble = target;
+
+        console.log(this.#draggble);
+
+        // Вынести это в отдельный класс
+        // this.#propertys = this.#getPropertys(name).style;
+
+        // console.log(this.#propertys);
+
+        this.#getPropertys(name);
+
+        // Вынести это в отдельный класс
+        this.#coords = Object.assign(this.#getCoords(target), this);
+
+        // console.log(this.#coords);
+
+        this.#shiftX = event.clientX - this.#coords.left;
+        this.#shiftY = event.clientY - this.#coords.top;
+
+        console.log(this.propertys);
+    };
+
+    #getCoords(element) {
+        return element.getBoundingClientRect();
+    };
+
+    get propertys() {
+        return this.#propertys;
     }
 
-    getCoords(event) {
-        return event.target.getBoundingClientRect();
-    }
-
-    getProperty(name) {
+    // вытащить отсюда в отдельный класс (инкапсулировать его в DragBox)
+    #getPropertys(name) {
         const stylesheet = document.styleSheets[0];
         let newRule = null;
         [stylesheet.cssRules].find(rule => {
@@ -29,50 +48,42 @@ class DragBox {
             };
         });
 
-        return newRule;
-    }
-}
+        this.#propertys = newRule.style;
+    };
+};
 
 class DragAndDrop {
-    constructor(event) {
+    constructor(event, name) {
         event.preventDefault();
 
-        //Здесь получается тоже агрегация ? Мне это чем - то напоминает то, как в функции вызываешь функцию.
-        // this.element = new DragBox(event.target.closest(".item"));
-
-        this.coords = this.element.getCoords(event);
-
-        this.shiftX = event.clientX - this.coords.left;
-        this.shiftY = event.clientY - this.coords.top;
-        this.width = this.coords.width;
-        this.height = this.coords.height;
-
-        this.show();
-    }
-
-    show() {
-        console.log(this.element);
-    }
+        //Это композиця.... //тут нужно точно изменить
+        this.draggable = new DragBox(event, name);
+    };
 }
 
 class Action {
+    #propertys
+    #conteiner
 
     // Не, ну а как иначе передать необходимый контейнер, за пределы которого мы не сможем перемещать элемент я не знаю
     // По типизации разберусь потом
-    constructor(eventName, dragConteiner, dragElement) {
-        this.name = eventName;
-        this.container = document.querySelector(`.${dragConteiner}`);
+    constructor(params) {
+        this.#propertys = Object.assign(params, this);
+        this.#conteiner = document.querySelector(`.${this.#propertys.lists}`);
 
         // Вот тут похоже на агрегацию
-        this.action = event => new DragBox(event, dragElement);
-        this.container.addEventListener(this.name, this.action);
+        this.action = event => {
+            if (event.target.closest(`.${this.#propertys.item}`)) new DragAndDrop(event, this.#propertys.item);
+        };
+
+        this.#conteiner.addEventListener(this.#propertys.eventName, this.action);
     }
 
     remove() {
-        this.container.removeEventListener(this.name, this.action);
+        this.#conteiner.removeEventListener(this.#propertys.eventName, this.action);
     }
 }
 
 // И тут я передаю имена классов - опять же когда и как показать, что ожидается именно имя класса html элементов
 //По сути, если я решу использовать id или data и подобное, то мне менять только в constructore Action и конструкторе DragBox по одно строке
-let action = new Action("pointerdown", "lists", "item");
+let action = new Action({ eventName: "pointerdown", lists: "lists", item: "item" });
