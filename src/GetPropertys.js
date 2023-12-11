@@ -1,13 +1,13 @@
 export class GetPropertys {
     #propertys;
 
-    constructor(params) {
-        this.#getPropertys(params.item);
-    }
+    constructor(name) {
+        this.#getPropertys(name);
+    };
 
     get propertys() {
         return this.#propertys;
-    }
+    };
 
     #getPropertys(name) {
         const stylesheet = document.styleSheets[0];
@@ -17,4 +17,4 @@ export class GetPropertys {
             };
         });
     };
-}
+};

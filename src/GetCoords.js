@@ -1,9 +1,9 @@
 export class GetCoords {
     #propertys;
 
-    constructor(...params) {
-        console.log(params);
-    }
+    constructor(node) {
+        this.#propertys = this.#getCoords(node);
+    };
 
     #getCoords(element) {
         return element.getBoundingClientRect();
@@ -11,5 +11,5 @@ export class GetCoords {
 
     get propertys() {
         return this.#propertys;
-    }
+    };
 }
