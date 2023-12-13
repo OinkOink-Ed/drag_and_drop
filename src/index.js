@@ -10,7 +10,7 @@ let parentObject = {};
 
 // Функция двигающая элемент
 function moveAt(x, y) {
-    dragObject.element.style.setProperty("position", "absolute");;
+    dragObject.element.style.setProperty("position", "absolute");
     dragObject.element.style.setProperty("z-index", 0);
 
     // Смещаем с учетом границ родительского элемента заданного классом в html

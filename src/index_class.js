@@ -1,31 +1,28 @@
-import { DragBox } from "./DragBox";
-import { GetPropertys } from "./GetPropertys";
-import { GetCoords } from "./GetCoords";
-import { dragAndDrop } from "./dragAndDrop";
+import { Action } from "./Action";
+import { dragHandler } from "./dragHandler";
 
-//Здесь нужно переписать чтобы в фигурировала функция, которая будет обработчиком события
-//И все создания экзепляров класса и прочее проходили в ней
 
+// Объект с параметрами требующимися для реализации работы DragAndDrop
+//Он передаётся извне в экспортируемую функцию
 let obj = {
     eventName: "pointerdown",
     parentDroppableClassName: "lists",
     draggbleClassName: "item",
 };
 
-// Начальный параметр объекта для инициализации draggable элемента
+// Иницализация события pointerdown
+// Здесь не захардкожено, чтобы с помощью Класса Action можно было создать другие события требующиеся для DragAndDrop
+export function start(obj) {
 
-//Декораторы подготовленные заранее
-let cssDecoprator = value => new GetPropertys(value);
-let coordsDecorator = value => new GetCoords(value);
+    // Так я передаю только те параметры, которые нужны данному классу для инициализации события
+    let initialize = new Action({ parentElementName: obj.parentDroppableClassName, eventName: obj.eventName });
 
-// но есть же ещё вот такое:
+    //А тут я привязываю к обработчику нужный в последствии контекст
+    initialize.add((event) => dragHandler.call({ parent: obj.parentDroppableClassName, draggabaleName: obj.draggbleClassName }, event));
 
-// Тогда почему мне потом в классе dDragBox нужно при вызове декоратора передавать ему параметр, а не брать значение something во время описания декоратора? (второй скриншот)
-// Это происходит из-за того, что я декоратору не привязываю контекст?
+    //Можно сделать статический метод, чтобы удалять евент исходя из экземпляра класса, но тогда проблема другая, этот экземпляр мне нужен где-то ещё
+    //А он находится только здесь
+    Action.removeEvents.call(initialize);
+};
 
-let test = new DragBox(obj);
-
-
-// Вот эта инициализация параметров нужных для изменения стилей нужна только при клике
-test.setCoords(coordsDecorator);
-test.setCssStyles(cssDecoprator);
+start(obj);
