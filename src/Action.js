@@ -1,25 +1,16 @@
-// Класс отвечающий за событие, которое передал пользователь
+import { dragHandler } from "./dragHandler";
 
 export class Action {
-    entity = {};
-    #node;
+    static #nodes = document.querySelectorAll("[parent]");
+    static #handler = dragHandler;
 
-    constructor(obj) {
-        this.entity = obj;
-        this.#node = document.querySelector(`.${obj.parentElementName}`);
+    static add() {
+        for (let i = 0; i < this.#nodes.length; i++) {
+            this.#nodes[i].addEventListener("pointerdown", event => this.#handler(event));
+        };
     };
 
-    add(handler) {
-        this.handler = event => handler(event);
-        this.#node.addEventListener(`${this.entity.eventName}`, this.handler);
-    };
+    static remove() {
 
-    remove() {
-        this.#node.removeEventListener(`${this.entity.eventName}`, this.handler);
-    }
-
-    // А как сделать так, чтобы. ОПА!
-    static removeEvents() {
-        this.remove();
     };
-} 
+}; 

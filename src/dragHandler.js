@@ -1,9 +1,30 @@
 import { DragElement } from "./DragElement";
+import { MovingElement } from "./MovingElement";
+import { ParentElement } from "./parentElement";
 
 export function dragHandler(event) {
-    if (!event.target.closest(".item")) {
-        return;
+    if (event.check) {
+        return
     };
 
-    console.log(this.draggabaleName);
+    let dragObject;
+    let parentObject;
+
+    if (event.target.closest("[dragitem]")) {
+        event.check = true;
+
+        // Создаем экземпляр перемещаемого элемента и инициализируем его стартовые и/или константные значения
+        dragObject = new DragElement(event.target);
+        dragObject.setShifts({ x: event.clientX, y: event.clientY });
+
+
+        //И Создаем экземпляр родителя ограничителя перемещения
+        parentObject = new ParentElement(event.target, dragObject.sizes);
+
+        // Устанавливаем координаты клика мыши относительно страницы
+        MovingElement.setPageCoords({ x: event.pageX, y: event.pageY });
+
+        //И рассчитывает координаты сразу после клика
+        MovingElement.move(dragObject.node, DragElement.shifts, ParentElement.coords);
+    };
 };
