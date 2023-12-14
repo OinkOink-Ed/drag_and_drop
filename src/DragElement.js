@@ -4,7 +4,7 @@ let cordsCallBack = (values) => GetCoords.getCoords(values);
 
 // Пока что делаю все свойсва приватными, дальше будет понятно
 export class DragElement {
-    #node;
+    static #node;
 
     #startCoords = {
         left: null,
@@ -22,7 +22,7 @@ export class DragElement {
     };
 
     constructor(node) {
-        this.node = node;
+        DragElement.#node = node;
 
         const { left, top, width, height } = cordsCallBack(node);
 
@@ -31,20 +31,20 @@ export class DragElement {
         this.#sizesElement.width = width;
         this.#sizesElement.height = height;
 
-        this.node.style.setProperty("position", "absolute");
-        this.node.style.setProperty("z-index", 10);
+        DragElement.#node.style.setProperty("position", "absolute");
+        DragElement.#node.style.setProperty("z-index", 10);
     };
 
     get sizes() {
         return this.#sizesElement;
     };
 
-    get node() {
+    static get node() {
         return this.#node;
     }
 
-    get shifts() {
-        return DragElement.#shifts;
+    static get shifts() {
+        return this.#shifts;
     }
 
     setShifts(obj) {

@@ -19,7 +19,7 @@ export class ParentElement {
         ParentElement.#coords.bottom = bottom - obj.height;
     };
 
-    get coords() {
-        return ParentElement.#coords;
+    static get coords() {
+        return this.#coords;
     }
 };
