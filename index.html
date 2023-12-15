@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./src/styles.scss" />
-  <script type="module" src="./src/index_class.js">
+  <script type="module" src="./src/index.js">
   </script>
   <title>Drag & Drop | Проект 2</title>
 </head>
@@ -14,13 +14,14 @@
   <div parent class="lists">
     <div class="list">
       <div class="header start">Старт</div>
-      <div class="lists__container droppable">
-        <div class="item drag-box">Задача 1</div>
+      <div droppable class="lists__container">
+        <div dragitem class="item drag-box">Задача 1
+        </div>
       </div>
     </div>
     <div class="list">
-      <div class="header progress">В процессе</div>
-      <div class="lists__container droppable">
+      <div droppable class="header progress">В процессе</div>
+      <div droppable class="lists__container">
         <div dragitem class="item drag-box">Работа 1</div>
         <div dragitem class="item drag-box">Работа 2</div>
         <div dragitem class="item drag-box">Работа 3</div>
@@ -30,7 +31,7 @@
     </div>
     <div class="list">
       <div class="header done">Готово</div>
-      <div class="lists__container droppable"></div>
+      <div droppable class="lists__container"></div>
     </div>
   </div>
 </body>

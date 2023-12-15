@@ -1,10 +1,12 @@
-import { Action } from "./Action";
 import { DragElement } from "./DragElement";
 import { MovingElement } from "./MovingElement";
+import { cancelMoving } from "./cancelMoving";
 import { moveHandler } from "./moveHandler";
 import { ParentElement } from "./parentElement";
 
 export function dragHandler(event) {
+    event.preventDefault();
+
     if (event.check) {
         return
     };
@@ -22,7 +24,6 @@ export function dragHandler(event) {
     dragObject = new DragElement(event.target);
     dragObject.setShifts({ x: event.clientX, y: event.clientY });
 
-
     //И Создаем экземпляр родителя ограничителя перемещения
     parentObject = new ParentElement(event.target, dragObject.sizes);
 
@@ -30,8 +31,11 @@ export function dragHandler(event) {
     MovingElement.setPageCoords({ x: event.pageX, y: event.pageY });
 
     //И рассчитывает координаты сразу после клика
-    MovingElement.move(DragElement.node, DragElement.shifts, ParentElement.coords);
+    MovingElement.move(DragElement.node, ParentElement.coords, DragElement.shifts);
 
-    new Action('parent');
-    Action.add('pointermove', moveHandler);
+    // Вешаем событие отжатия клика
+    document.addEventListener('pointerup', cancelMoving);
+
+    //Запускаем событие перемещения
+    document.addEventListener('pointermove', moveHandler);
 };
