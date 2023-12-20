@@ -14,7 +14,7 @@ export function dragHandler(event) {
     let dragObject;
     let parentObject;
 
-    if (!event.target.closest("[dragitem]")) {
+    if (!event.target.hasAttribute("dragitem")) {
         return;
     };
 
